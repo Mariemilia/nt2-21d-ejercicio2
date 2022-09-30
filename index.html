@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ejemplo 1</title>
+    <title>Trabajo Práctico n°2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -12,11 +12,18 @@
 
 </head>
 
-
 <div class="container-fluid mt-3" id="app">
-    <input type="text" class="form-control" v-model="criterioDeBusqueda"
-        placeholder="Ingresar un criterio de busqueda...">
+    <input type="text" class="form-control" v-model="BuscarPorNombreApellido" placeholder="Ingresar el nombre y apellido a buscar...">
     <br>
+    <input type="text" class="form-control" v-model="buscarPorDni" placeholder="Ingresar el DNI a buscar...">
+    <br>
+    <div v-if="showAlert()">
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <Strong>Advertencia: debe ingresar al menos 3 caracteres.</Strong>
+        </div>
+    </div>
+
     <div class="card-deck m-0">
         <div class="row">
             <div class="col" v-for="persona in personasFiltradas">
@@ -30,7 +37,7 @@
             </div>
         </div>
     </div>
-
+    
 </div>
 
 </html>
@@ -39,20 +46,33 @@
     new Vue({
         el: '#app',
         data: {
-            criterioDeBusqueda: '',
+            buscarPorNombreApellido: '',
+            buscarPorDni: '',
             //Aquí, en este array es donde tienen que agregar su información
             personas: [
-                {
-                    nombre: "Daniel",
-                    apellido: "Sanchez",
-                    correo: "danielsanchez68@hotmail.com",
-                    dni: "20442873"
+            {
+                    nombre: "Friedrich",
+                    apellido: "Nietzsche",
+                    correo: "friedrichnietzsche@hotmail.com",
+                    dni: "93393939"
                 },
                 {
-                    nombre: "...",
-                    apellido: "...",
-                    correo: "...",
-                    dni: "..."
+                    nombre: "Marcelo",
+                    apellido: "Fox",
+                    correo: "marcelofox@gmail.com",
+                    dni: "9999999"
+                },
+                {
+                    nombre: "Jim",
+                    apellido: "Carrey",
+                    correo: "jimcarrey@gmail.com",
+                    dni: "33333333"
+                },
+                {
+                    nombre: "John",
+                    apellido: "Bonham",
+                    correo: "johnbonham@gmail.com",
+                    dni: "39939393"
                 },
             ]
 
@@ -60,15 +80,27 @@
         computed: {
             personasFiltradas() {
                 return this.personas.filter((persona) => {
-                    let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
-                    return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
+
+                    let registroNombreApellido = `${persona.nombre} ${persona.apellido}`
+                    let registroDni = `${persona.dni}`
+
+                    return !this.shorAlert() ? registroNombreApellido.toLowerCase.includes(this.buscarPorNombreApellido.toLowerCase())
+                            && registroDni.toLowerCase().includes(this.buscarPorDni.toLowerCase()) : this.showAlert()
+                    
                 });
             }
         },
         methods: {
             getNombreCompleto(persona) {
                 return `${persona.nombre} ${persona.apellido}`
+            },
+
+            showAlert() {
+                const CAR_MIN = 3
+                return ((this.buscarPorNombreApellido.toString().lenght > 0 ||  this.buscarPorDni.toString().lenght > 0) && 
+                    (this.buscarPorNombreApellido.toString().lenght < CAR_MIN && this.buscarPorDni.toString().lenght < CAR_MIN)) 
             }
         }
     });
+
 </script>
